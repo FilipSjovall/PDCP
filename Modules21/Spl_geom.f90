@@ -472,30 +472,4 @@ end subroutine Nodesens
 
 ! Använda any(res==coord(i)) för att ta bort duplicates
 
-
-
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-! Bellewille washer with a hole included
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-subroutine washer_hole(coord,coorduv,dof,edof,loaddof,V0,V,DV,Uk,Vk,dX,nelu,nelv,alpha,xmax,ymax,H0,ri,L)
-
-
-
-
-end subroutine
-
-
-
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-! Update geometry of washer with hole
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-subroutine update_hole(coord,nelu,nelv,alpha,V0,L,xmax)
-
-
-
-
-end subroutine
-
 end module Spl_geom

@@ -115,10 +115,6 @@ subroutine c2tl6_e(ke,coord,t,D,ed,es)
     end do
         !print * , "R: " , R
         !print * , " "
-        !print * , "H: ", H0
-        !print * , " "
-        !print * , "B: ", Bl0
-        !print * , " "
 end subroutine c2tl6_e
 
 subroutine c2tl6_f(ef,coord,t,es,ed)

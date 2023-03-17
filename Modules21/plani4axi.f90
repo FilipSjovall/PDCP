@@ -38,7 +38,7 @@ DOUBLE PRECISION, PARAMETER                   :: pi=3.14159265358979D0
 DOUBLE PRECISION, DIMENSION(ngp,4)            :: N
 DOUBLE PRECISION, DIMENSION(ngp)              :: eta, xsi,wp, w_1, w_2
 DOUBLE PRECISION, DIMENSION(2*ngp,4),TARGET   :: dNr 
-DOUBLE PRECISION, DIMENSION(8,8)              :: Ke
+DOUBLE PRECISION, DIMENSION(8,8), intent(inout)              :: Ke
 DOUBLE PRECISION, DIMENSION(4,8)              :: BL0, BL1, BL
 DOUBLE PRECISION, DIMENSION(5,8)              :: BNL
 DOUBLE PRECISION, DIMENSION(2*ngp,2)          :: JT
@@ -96,6 +96,11 @@ END IF
 
 
 !--------- axisymmetric conditions -----------------------------
+Bl0 = 0d0
+Bl1 = 0d0
+BL  = 0d0
+BNL = 0d0
+S   = 0d0
 Ke=0D0
 DO gp=1,ngp
  
@@ -147,16 +152,26 @@ DO gp=1,ngp
 		
   S(1:2,1:2)=es(gp,1:2,1:2)
   S(3:5,3:5)=es(gp,:,:)
-  BL=BL0+BL1		
+  BL=BL0+BL1
  
   !D=>D_el(i,1:4,1:4)
  	D=>D_el(1:4,1:4,gp)
 
-  Ke=Ke+(MATMUL(TRANSPOSE(BL),MATMUL(D,BL))+MATMUL(MATMUL(TRANSPOSE(BNL),S),BNL))*detJ*wp(gp)*xbar1*2.D0*pi 
+  Ke=Ke+(MATMUL(TRANSPOSE(BL),MATMUL(D,BL)) + MATMUL(MATMUL(TRANSPOSE(BNL),S),BNL))*detJ*wp(gp)*xbar1*2.D0*pi 
+  
+  !print * , "Ke i plani4axi - loop" , Ke
+  !if(gp.eq.1) then
+  !  print * , "D" , D
+  !  print * , "S" , S
+  !  print * , "BL", BL
+  !  print * , "BNL", BNL
+  !  print * , "Ke i plani4axi" , Ke
+  !endif
 
 END DO
-RETURN
-END
+
+
+END subroutine PLANI4E_AXI
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -252,6 +267,11 @@ END IF
 
 !--------- axisymmetric conditions -----------------------------
 ef=0D0
+Bl0 = 0d0
+Bl1 = 0d0
+BL  = 0d0
+BNL = 0d0
+S   = 0d0
 DO gp=1,ngp
  
   detJ=JT(2*gp-1,1)*JT(2*gp,2)-JT(2*gp-1,2)*JT(2*gp,1)
@@ -302,7 +322,7 @@ DO gp=1,ngp
   S(1:2,1:2)=es(gp,1:2,1:2)
   S(3:5,3:5)=es(gp,:,:)
 		
-  BL=BL0+BL1		
+  BL=BL0+BL1
 
   ! Changed to fit another format
   !ef=ef+MATMUL(TRANSPOSE(BL),RESHAPE((/es(gp,1,1),es(gp,2,2),es(gp,3,3),es(gp,1,2)/),(/4,1/)))*detJ*wp(gp)*xbar1*2.D0*pi

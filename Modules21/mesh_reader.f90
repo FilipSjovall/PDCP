@@ -216,11 +216,13 @@ do n = 1,10
          ! Assemble                                             # !
          ! ###################################################### !
          !call assem(K,Ke,edofn(ie,2:13))
+         
          call assem(K,Ke,enod(ie,2:7),dofnod)
-         F(edofn(ie,2:13)) = F(edofn(ie,2:13)) + fe
 
+         F(edofn(ie,2:13)) = F(edofn(ie,2:13)) + fe
       end do
 
+      
       ! ###################################################### !
       ! Solve                                                # !
       ! ###################################################### !
@@ -245,10 +247,7 @@ do n = 1,10
             ef(:,gp) = (/ dg(gp,1,1), dg(gp,1,2), dg(gp,2,1), dg(gp,2,2) /)
             !ef(:,gp) = (/ dg(gp,1,1), dg(gp,2,1), dg(gp,1,2), dg(gp,2,2) /)
          end do	
-         
-         if(ie.eq.1) then
-            !print * , "dg: " , ef(:,1)
-         end if
+   
 !         ! ###################################################### !
          ! Compute the material stiffness [nelm x ngp x 3 x 3]  # !
          ! ###################################################### !
@@ -299,7 +298,6 @@ do n = 1,10
       res(bcdof) = 0d0
       residual   = dsqrt(dot_product(res,res))
       print * ,  'Iteration:', iter, '; Residual:', residual
-
       if(iter.eq.imax) then
          print * , "----------------------- Maximum iteration count reached -----------------------" 
       end if

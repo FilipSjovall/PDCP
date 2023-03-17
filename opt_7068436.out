@@ -1,0 +1,75 @@
+#!/bin/sh
+
+#SBATCH --tasks-per-node=1 # number of processors
+#SBATCH -N 1 # 1 node – important for Openmp
+
+# Walltime hh:mm:ss
+#SBATCH -t 1:00:00 
+#SBATCH -A lu2022-2-24
+
+# Name the job
+#SBATCH -J opt 
+
+# Specify outfile and errorfile
+#SBATCH -o opt_%j.out
+#SBATCH -e opt_%j.err
+
+# To set memory of each CPU
+##SBATCH --mem-per-cpu=31000
+
+#To run short tests (maximum 1h), it is possible to request extra high priority on Aurora with the help of 
+##SBATCH --qos=test
+
+mkdir -p results
+
+cat $0
+
+date
+
+export KMP_AFFINITY=granularity=fine,compact
+export OMP_NUM_THREADS=1
+export MKL_NUM_THREADS=1
+export KMP_WARNINGS=0
+
+module load matlab/2020b
+#module load intel/2020.10
+module load intel/2021b
+module load GCC/10.3.0
+module load OpenMPI/4.1.1
+module load Scalasca/2.6
+#module load Valgrind/3.17.0
+
+
+# Start program
+scan ./run_4
+#valgrind ./run_opt
+
+# For usage of DDT debugger instead use comment below
+#ddt --connect ./run_opt
+
+date
+Mon Mar 13 13:08:55 CET 2023
+ Matinit
+ Number of nods                :         286
+ Number of dofs                :         572
+ Number of elements            :         250
+ Number of boundary conditions :           2
+ --------------------------------------------------------------
+ Start to create symmetric sparse pattern
+ Symmetric sparse pattern created
+ --------------------------------------------------------------
+ Volume  4.623246288839077E-008
+ DISPLACEMENT CONTROLLED NR
+ Starting equlibrium iter at loadstep:           1
+forrtl: severe (168): Program Exception - illegal instruction
+Image              PC                Routine            Line        Source             
+run_4              0000000008A5489B  Unknown               Unknown  Unknown
+libpthread-2.17.s  00007F207C85C630  Unknown               Unknown  Unknown
+run_4              00000000004BCF7A  Unknown               Unknown  Unknown
+run_4              00000000004BCAA1  Unknown               Unknown  Unknown
+run_4              000000000041B262  Unknown               Unknown  Unknown
+run_4              000000000041346F  Unknown               Unknown  Unknown
+run_4              0000000000406F62  Unknown               Unknown  Unknown
+libc-2.17.so       00007F207B9C2555  __libc_start_main     Unknown  Unknown
+run_4              0000000000406E7D  Unknown               Unknown  Unknown
+Mon Mar 13 13:09:32 CET 2023
